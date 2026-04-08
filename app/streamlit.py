@@ -1,6 +1,7 @@
 import streamlit as st
 from src.rag.chain import chain
 
+
 st.title("RAG Chatbot")
 
 # 1. Initialize chat history in session state
