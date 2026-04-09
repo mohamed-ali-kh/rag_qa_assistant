@@ -1,20 +1,4 @@
-from langchain_community.vectorstores import FAISS
-from ..embeddings.models import create_embedding_model
-
+from src.vector_store.hybrid_retriever import get_hybrid_retriever
 
 def get_retriever():
-    embedding_model = create_embedding_model()
-    vector_store = FAISS.load_local(
-                                    r"data\faiss_index",
-                                    embedding_model,
-                                    allow_dangerous_deserialization=True
-                                    )
-    
-    return vector_store.as_retriever(
-        search_type="mmr",
-        search_kwargs={
-                        "k": 6,
-                        "lambda_mult": 0.7,
-                        "fetch_k": 20
-                        }
-    )
+    return get_hybrid_retriever(r"data\faiss_index")
