@@ -79,7 +79,17 @@ if prompt := st.chat_input("Ask something..."):
 
     with st.chat_message("assistant"):
         chain = get_chain(session_id)
-        response_generator = chain.stream({"question": prompt}, config=config)
-        full_response = st.write_stream(response_generator)
 
-    st.session_state.messages.append({"role": "assistant", "content": full_response})
+        # collect full response first (sources need full output, can't stream dict)
+        full_output = chain.invoke({"question": prompt}, config=config)
+        answer = full_output["answer"]
+        sources = full_output.get("sources", [])
+
+        st.markdown(answer)
+
+        if sources:
+            with st.expander("📚 Sources"):
+                for source in sorted(sources):
+                    st.caption(f"• {source}")
+
+    st.session_state.messages.append({"role": "assistant", "content": answer})

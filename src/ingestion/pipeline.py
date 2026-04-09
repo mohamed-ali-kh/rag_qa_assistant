@@ -1,5 +1,6 @@
 from .loader import load_file
 from .splitter import split_pages
+import os
 
 def run_ingestion_pipeline(file_path):
     print(f"Loading document... from {file_path}")
@@ -7,6 +8,12 @@ def run_ingestion_pipeline(file_path):
 
     print("splitting document...")
     chunks = split_pages(pages)
+
+    #tag each chunk with source metadata (filename + page number)
+    file_name =  os.path.basename(file_path)
+    for chunk in chunks:
+        chunk.metadata["source"] = f"{file_name} - page {chunk.metadata['page_number']}"
+        chunk.metadata["file_path"] = file_path
 
     print(f"Document split into {len(chunks)} chunks.")
     return chunks
