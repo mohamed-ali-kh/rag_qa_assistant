@@ -15,6 +15,11 @@ def get_user_retriever(session_id):
         allow_dangerous_deserialization=True
     )
     return vector_store.as_retriever(
-            search_type="similarity",
-            search_kwargs={"k": 5}
+            search_type="mmr",
+            search_kwargs={
+                "k": 6,
+                "lambda_mult": 0.7,
+                "fetch_k": 20
+                
+                }
     )
