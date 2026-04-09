@@ -1,9 +1,9 @@
-from .loader import load_pdf
+from .loader import load_file
 from .splitter import split_pages
 
-def run_ingestion_pipeline(pdf_path):
-    print(f"Loading document... from {pdf_path}")
-    pages = load_pdf(pdf_path)
+def run_ingestion_pipeline(file_path):
+    print(f"Loading document... from {file_path}")
+    pages = load_file(file_path)
 
     print("splitting document...")
     chunks = split_pages(pages)

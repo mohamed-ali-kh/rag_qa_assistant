@@ -1,5 +1,6 @@
 from src.upload.create_user_dir import get_user_dir
 from src.ingestion.pipeline import run_ingestion_pipeline 
+from src.ingestion.loader import SUPPORTED_FILE_TYPES
 from src.embeddings.models import create_embedding_model
 from src.embeddings.embedder import embed_chunks
 from langchain_community.vectorstores import FAISS
@@ -8,6 +9,11 @@ import os
 
 def ingest_uploaded_file(uploaded_file, session_id):
     document_dir, index_dir = get_user_dir(session_id)
+
+    # validate extension before doing anything
+    ext = os.path.splitext(uploaded_file.name)[1].lower()
+    if ext not in SUPPORTED_FILE_TYPES:
+        raise ValueError(f"Unsupported file type: {ext}")
 
     # 1. Save raw file to disk
     file_path = os.path.join(document_dir, uploaded_file.name)

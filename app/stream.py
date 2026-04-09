@@ -25,8 +25,8 @@ with st.sidebar:
     # ── Document upload ──────────────────────────────────────────────────────
     st.subheader("📄 Upload Documents")
     uploaded = st.file_uploader(
-        "Add PDFs to your knowledge base",
-        type=["pdf"],
+        "Add documents to your knowledge base",
+        type=["pdf", "txt", "docx", "md"],      
         accept_multiple_files=True,
     )
 
