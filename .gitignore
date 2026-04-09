@@ -1,8 +1,5 @@
-..env
 __pycache__/
 *.db
 venv/
-user_data/
-user_data_*/
-users_data/
 .env
+users_data/users/*
