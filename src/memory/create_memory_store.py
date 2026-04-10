@@ -12,7 +12,7 @@ def get_session_id(session_id):
         store[session_id] = ChatMessageHistory()
     return store[session_id]"""
 
-def get_session_id(session_id):
+def get_session_history(session_id):
     return RedisChatMessageHistory(
         session_id=session_id,
         redis_url=REDIS_URL,
@@ -20,5 +20,5 @@ def get_session_id(session_id):
     )
 
 def clear_session_history(session_id):
-    history = get_session_id(session_id)
+    history = get_session_history(session_id)
     history.clear()
