@@ -3,7 +3,7 @@ from langchain_classic.retrievers import EnsembleRetriever
 from langchain_community.vectorstores import FAISS
 from src.embeddings.models import create_embedding_model
 from langchain_community.document_compressors import FlashrankRerank
-from langchain_community import ContextualCompressionRetriever
+from langchain_classic.retrievers import ContextualCompressionRetriever
 
 import os
 
@@ -31,7 +31,8 @@ def get_hybrid_retriever(index_dir):
     
 
     # 2- build BM25 retriever for keyword search
-    docs  = list(vector_store.__dict.values())   #vector_store.docstore._dict is FAISS's internal document store — a plain Python dict where the keys are chunk IDs and the values are the actual Document objects (the text chunks + metadata). Calling .values() gives you all the documents, and wrapping it in list() converts it to a list.
+    docs = list(vector_store.docstore._dict.values())
+    #vector_store.docstore._dict is FAISS's internal document store — a plain Python dict where the keys are chunk IDs and the values are the actual Document objects (the text chunks + metadata). Calling .values() gives you all the documents, and wrapping it in list() converts it to a list.
     bm25_retriever = BM25Retriever.from_documents(docs)
     bm25_retriever.k = 6
 
@@ -40,11 +41,14 @@ def get_hybrid_retriever(index_dir):
         weights=[0.6, 0.4]  # Adjust weights as needed
     )
     
+    return hybrid_retriever
+   
     # 3- add a compression layer to re-rank and filter results
     # 4. Rerank the combined results down to the best 6
-    compressor = FlashrankRerank(top_n=4)  # Adjust top_n as needed
+    """compressor = FlashrankRerank(top_n=4)  # Adjust top_n as needed
     reranker = ContextualCompressionRetriever(
         base_compressor=compressor,
         base_retriever=hybrid_retriever
     )
     return reranker
+"""

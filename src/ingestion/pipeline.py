@@ -10,10 +10,12 @@ def run_ingestion_pipeline(file_path):
     chunks = split_pages(pages)
 
     #tag each chunk with source metadata (filename + page number)
-    file_name =  os.path.basename(file_path)
+    file_name = os.path.basename(file_path)
     for chunk in chunks:
-        chunk.metadata["source"] = f"{file_name} - page {chunk.metadata['page_number']}"
+        chunk.metadata["source"] = file_name
         chunk.metadata["file_path"] = file_path
+        if "page_number" in chunk.metadata:
+            chunk.metadata["page"] = chunk.metadata["page_number"]
 
     print(f"Document split into {len(chunks)} chunks.")
     return chunks
