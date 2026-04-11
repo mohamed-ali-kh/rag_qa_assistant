@@ -6,11 +6,6 @@ from dotenv import load_dotenv
 load_dotenv()
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 
-"""store = {}  # wiped on every restart
-def get_session_id(session_id):
-    if session_id not in store:
-        store[session_id] = ChatMessageHistory()
-    return store[session_id]"""
 
 def get_session_history(session_id):
     return RedisChatMessageHistory(

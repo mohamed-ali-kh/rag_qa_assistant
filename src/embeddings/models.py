@@ -1,8 +1,13 @@
+from langchain_cohere import CohereEmbeddings
 from functools import lru_cache
-from langchain_huggingface import HuggingFaceEmbeddings
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-@lru_cache(maxsize=1)   #@lru_cache(maxsize=1) means the model is loaded once and reused everywhere
+@lru_cache(maxsize=1)
 def create_embedding_model():
-    embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    return embedding_model
+    return CohereEmbeddings(
+        model="embed-english-v3.0",
+        cohere_api_key=os.getenv("COHERE_API_KEY")
+    )

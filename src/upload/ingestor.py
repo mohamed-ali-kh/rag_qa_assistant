@@ -7,20 +7,22 @@ from langchain_community.vectorstores import FAISS
 import os
 
 
-def ingest_uploaded_file(uploaded_file, session_id):
+def ingest_uploaded_file(filename, file_bytes , session_id):
+    filename = filename.strip()
     document_dir, index_dir = get_user_dir(session_id)
 
     # validate extension before doing anything
-    ext = os.path.splitext(uploaded_file.name)[1].lower()
+    ext = os.path.splitext(filename)[1].lower()
     if ext not in SUPPORTED_FILE_TYPES:
         raise ValueError(f"Unsupported file type: {ext}")
 
     # 1. Save raw file to disk
-    file_path = os.path.join(document_dir, uploaded_file.name)
+    file_path = os.path.join(document_dir, filename)
     with open(file_path, "wb") as f:
-        f.write(uploaded_file.getvalue())
+        f.write(file_bytes)
 
     # 2. Run full pipeline — returns a FAISS store directly
+    print(f"DEBUG: filename={filename}, type={type(filename)}")
     new_store = embed_chunks(file_path)
 
     # 3. Merge into or create the user's index

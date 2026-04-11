@@ -8,3 +8,5 @@ redis
 langchain-redis
 docx2txt 
 unstructured
+python-multipart
+langchain-cohere
